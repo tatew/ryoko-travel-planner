@@ -1,0 +1,8 @@
+spring:
+  main:
+    banner-mode: CONSOLE
+
+server:
+  port: 30000
+  ssl:
+    enabled: false
