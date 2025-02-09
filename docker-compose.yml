@@ -1,0 +1,35 @@
+services:
+  web:
+    depends_on:
+      database:
+        condition: service_healthy
+    build: 
+      dockerfile: local.dockerfile
+    ports:
+      - 8000:8000
+      - 8443:8443
+      - 30000:30000
+    volumes:
+      - ./ryoko-api/target:/app
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+  database:
+    image: postgres:16.3
+    ports: 
+      - 5432:5432
+    environment:
+      - "POSTGRES_DB=${DB_NAME}"
+      - "POSTGRES_USER=${DB_USERNAME}"
+      - "POSTGRES_PASSWORD=${DB_PASSWORD}"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: 
+        - CMD-SHELL
+        - pg_isready -U ryoko-user -d ryokodb
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+volumes:
+  pgdata: null
