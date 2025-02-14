@@ -8,6 +8,7 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.4.2</version>
     </parent>
+    <packaging>jar</packaging>
 
     <groupId>org.tatewilhelm</groupId>
     <artifactId>RyokoTravelPlanner</artifactId>
@@ -41,6 +42,12 @@
     </dependencies>
     <build>
         <finalName>ryoko-api</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
 
 </project>
