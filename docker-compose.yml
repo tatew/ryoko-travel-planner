@@ -1,8 +1,12 @@
 services:
   web:
+    networks:
+      - ryoko
     depends_on:
       database:
         condition: service_healthy
+      flyway:
+        condition: service_completed_successfully
     build: 
       dockerfile: local.dockerfile
     ports:
@@ -15,6 +19,8 @@ services:
       - SPRING_PROFILES_ACTIVE=local
   database:
     image: postgres:16.3
+    networks:
+      - ryoko
     ports: 
       - 5432:5432
     environment:
@@ -31,5 +37,20 @@ services:
       timeout: 30s
       retries: 5
       start_period: 30s
+  flyway:
+    image: flyway/flyway
+    networks:
+      - ryoko
+    volumes:
+      - ./flyway/sql:/flyway/sql
+      - ./flyway/conf/flyway.toml:/flyway/conf/flyway.toml
+    depends_on:
+      database:
+        condition: service_healthy
+    command: "-configFiles=/flyway/conf/flyway.toml -url=${FLYWAY_DB_URL} -user=${DB_USERNAME} -password=${DB_PASSWORD} -connectRetries=10 migrate"
+
 volumes:
   pgdata: null
+networks:
+  ryoko:
+    driver: bridge
