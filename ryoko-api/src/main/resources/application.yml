@@ -1,6 +1,10 @@
 spring:
   main:
-    banner-mode: CONSOLE
+    banner-mode: false
+  application:
+    name: ryoko-api
+  mvc:
+    throwExceptionIfNoHandlerFound: true
 
 server:
   port: 30000

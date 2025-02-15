@@ -1,5 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="RunRyokoApi" type="Application" factoryName="Application">
+  <configuration default="false" name="RunLocal" type="Application" factoryName="Application">
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/../.env.local" />
+    </option>
     <option name="MAIN_CLASS_NAME" value="tatew.ryoko.App" />
     <module name="RyokoTravelPlanner" />
     <option name="VM_PARAMETERS" value="-Dspring.profiles.active=local" />

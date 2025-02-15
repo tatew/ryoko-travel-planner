@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+echo "Running docker compose with profile: local"
+
+docker compose --profile local --env-file .env.local up
