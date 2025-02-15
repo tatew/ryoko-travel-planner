@@ -18,3 +18,5 @@ management:
   endpoint:
     env:
       show-values: ALWAYS
+springdoc:
+  show-actuator: true

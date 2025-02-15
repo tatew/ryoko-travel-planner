@@ -4,7 +4,7 @@ CREATE
 CREATE 
     TABLE activities(
         id SERIAL PRIMARY KEY,
-        guid UUID DEFAULT uuid_generate_v4(),
+        uuid UUID DEFAULT uuid_generate_v4() NOT NULL,
         name TEXT NOT NULL,
         coordinates POINT,
         notes TEXT,
@@ -20,6 +20,6 @@ CREATE
         address_state TEXT,
         address_country TEXT, 
         address_postcode TEXT, 
-        created_at TIMESTAMP, 
-        archived_at TIMESTAMP
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+        archived_at TIMESTAMPTZ
     );

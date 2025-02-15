@@ -1,0 +1,18 @@
+<configuration>
+    <include resource="logging.json-appender.xml"/>
+    <springProfile name="local | ci">
+        <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%date [%level] %logger - %msg %n</pattern>
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="stdout"/>
+        </root>
+    </springProfile>
+    <springProfile name="!(local | ci)">
+        <root level="INFO">
+            <appender-ref ref="consoleJsonAppender"/>
+        </root>
+    </springProfile>
+</configuration>
