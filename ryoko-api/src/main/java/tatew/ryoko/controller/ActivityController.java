@@ -35,11 +35,34 @@ public class ActivityController
                     @ApiResponse(responseCode = "500", description = "Internal Server Error")
             }
     )
-    @GetMapping(value = "")
+    @GetMapping(value = "", produces = {"application/json"})
     public ResponseEntity<Iterable<Activity>> getActivities()
     {
         var activities = activityRepository.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(activities);
+    }
+
+    @ResponseBody
+    @Operation(
+            operationId = "getActivityById",
+            summary = "Gets an activity by ID",
+            tags = {"activities-controller"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = Activity.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Not Found"),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+            }
+    )
+    @GetMapping(value = "/{activityId}", produces = {"application/json"})
+    public ResponseEntity<Activity> getActivityById(
+            @Parameter(description = "The id of the activity to return", required = true)
+            @PathVariable(value = "activityId") long id)
+    {
+        return activityRepository.findById(id)
+                .map(activity -> ResponseEntity.status(HttpStatus.OK).body(activity))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @Operation(

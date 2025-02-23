@@ -6,15 +6,15 @@ CREATE
         map_provider VARCHAR(10),
         created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
         archived_at TIMESTAMPTZ
-    )
+    );
 
 CREATE 
     TABLE activity (
         id SERIAL PRIMARY KEY,
-        region_id INTEGER REFERENCES region 
+        region_id INTEGER REFERENCES region,
         name TEXT NOT NULL,
         is_outdoor BOOLEAN,
-        duration_minutes INTEGER
+        duration_minutes INTEGER,
         coordinates POINT,
         notes TEXT,
         map_link TEXT,
