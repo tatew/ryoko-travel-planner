@@ -7,7 +7,6 @@ title: Ryoko Travel Planner
 erDiagram
     ACTIVITY {
         int id PK
-        int address_id FK
         int region_id FK
         text name
         bool is_outdoor
@@ -22,16 +21,12 @@ erDiagram
         varchar(3) currency
         timestamptz created_at
         timestamptz archived_at
-    }
-    ADDRESS {
-        int id PK
-        text hash
-        text street_line1
-        text street_Line2
-        text state_province
-        string state
-        text country
-        text postcode
+        text address_line1
+        text address_line2
+        text city
+        text address_state
+        text address_country
+        text address_postcode
     }
     REGION {
         int id PK
@@ -50,7 +45,6 @@ erDiagram
         int tag_id FK
         int activity_id FK
     }
-    ACTIVITY one or more to one ADDRESS : has
     ACTIVITY zero or more to one or zero REGION : located_in
     ACTIVITY one to zero or more ACTIVITY_TAG : "tagged with"
     TAG one to zero or more ACTIVITY_TAG: "applies to"
