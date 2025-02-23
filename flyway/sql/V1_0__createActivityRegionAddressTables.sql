@@ -1,16 +1,4 @@
 CREATE 
-    TABLE address (
-        id SERIAL PRIMARY KEY,
-        hash TEXT NOT NULL UNIQUE,
-        street_line1 TEXT,
-        street_line2 TEXT,
-        city TEXT,
-        state_province TEXT,
-        country TEXT,
-        postcode TEXT
-    );
-
-CREATE 
     TABLE region (
         id SERIAL PRIMARY KEY,
         name TEXT,
@@ -23,7 +11,6 @@ CREATE
 CREATE 
     TABLE activity (
         id SERIAL PRIMARY KEY,
-        address_id INTEGER REFERENCES address
         region_id INTEGER REFERENCES region 
         name TEXT NOT NULL,
         is_outdoor BOOLEAN,
@@ -37,5 +24,11 @@ CREATE
         cost NUMERIC,
         currency VARCHAR(3),
         created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL, 
-        archived_at TIMESTAMPTZ
+        archived_at TIMESTAMPTZ,
+        address_line1 TEXT,
+        address_line2 TEXT,
+        address_city TEXT,
+        address_state TEXT,
+        address_country TEXT,
+        address_postcode TEXT
     );

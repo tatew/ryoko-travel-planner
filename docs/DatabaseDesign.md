@@ -23,7 +23,7 @@ erDiagram
         timestamptz archived_at
         text address_line1
         text address_line2
-        text city
+        text address_city
         text address_state
         text address_country
         text address_postcode
