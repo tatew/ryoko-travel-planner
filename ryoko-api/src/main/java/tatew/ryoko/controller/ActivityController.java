@@ -4,23 +4,29 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tatew.ryoko.exception.GetActivityException;
 import tatew.ryoko.model.db.Activity;
-import tatew.ryoko.repository.ActivityRepository;
+import tatew.ryoko.model.dto.ErrorDto;
+import tatew.ryoko.service.ActivityService;
+
+import java.util.List;
 
 @Slf4j
 @RestController
 public class ActivityController
 {
     @Autowired
-    private ActivityRepository activityRepository;
+    private ActivityService activityService;
 
     @Operation(
             operationId = "getAllActivities",
@@ -30,13 +36,17 @@ public class ActivityController
                     @ApiResponse(responseCode = "200", description = "OK", content = {
                             @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Activity.class)))
                     }),
-                    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorDto.class),
+                                    examples = @ExampleObject(value = "{\"message\":\"An unexpected server error occurred\",\"status\":\"INTERNAL_SERVER_ERROR\"}"))
+                    })
             }
     )
     @GetMapping(value = "/activities", produces = {"application/json"})
     public @ResponseBody ResponseEntity<Iterable<Activity>> getActivities()
     {
-        var activities = activityRepository.findAll();
+        var activities = activityService.getAllActivities();
         return ResponseEntity.status(HttpStatus.OK).body(activities);
     }
 
@@ -48,18 +58,25 @@ public class ActivityController
                     @ApiResponse(responseCode = "200", description = "OK", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = Activity.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Not Found"),
-                    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorDto.class),
+                                    examples = @ExampleObject(value = "{\"message\":\"Activity with id 1 not found\",\"status\":\"NOT_FOUND\"}"))
+                    }),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorDto.class),
+                                    examples = @ExampleObject(value = "{\"message\":\"An unexpected server error occurred\",\"status\":\"INTERNAL_SERVER_ERROR\"}"))
+                    })
             }
     )
     @GetMapping(value = "/activities/{activityId}", produces = {"application/json"})
     public @ResponseBody ResponseEntity<Activity> getActivityById(
             @Parameter(description = "The id of the activity to return", required = true)
-            @PathVariable(value = "activityId") long id)
+            @PathVariable(value = "activityId") long id) throws GetActivityException
     {
-        return activityRepository.findById(id)
-                .map(activity -> ResponseEntity.status(HttpStatus.OK).body(activity))
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        Activity activity = activityService.getActivityById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(activity);
     }
 
     @Operation(
@@ -68,20 +85,40 @@ public class ActivityController
             tags = "activities-controller",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Activity Created"),
-                    @ApiResponse(responseCode = "400", description = "Bad Request"),
-                    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+                    @ApiResponse(responseCode = "400", description = "BadRequest", content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorDto.class),
+                                    examples = @ExampleObject(value = "{\"message\":\"An unexpected server error occurred\",\"status\":\"INTERNAL_SERVER_ERROR\"}"))
+                    }),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorDto.class),
+                                    examples = @ExampleObject(value = "{\"message\":\"An unexpected server error occurred\",\"status\":\"INTERNAL_SERVER_ERROR\"}"))
+                    })
             }
     )
     @PostMapping(value = "/activities", consumes = {"application/json"})
-    public @ResponseBody ResponseEntity<Void> addActivity(
-            @Parameter(description = "Create a new activity", required = true)
+    public @ResponseBody ResponseEntity<Void> addUpdateActivity(
+            @Parameter(description = "Create a new activity or update an existing activity", required = true)
             @Valid
             @RequestBody
             Activity activity)
     {
-        Activity createdActivity = activityRepository.save(activity);
+        Activity createdActivity = activityService.createActivity(activity);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Location", "/activities/" + createdActivity.getId())
                 .build();
+    }
+
+
+    @ExceptionHandler(GetActivityException.class)
+    public ResponseEntity<ErrorDto> handleGetActivityException(GetActivityException e)
+    {
+        String message = "Activity with id " + e.getActivityId() + " not found";
+        MDC.put("activityId", String.valueOf(e.getActivityId()));
+        log.error(e.getMessage(), e);
+        MDC.remove("activityId");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorDto(List.of(message), HttpStatus.NOT_FOUND));
     }
 }

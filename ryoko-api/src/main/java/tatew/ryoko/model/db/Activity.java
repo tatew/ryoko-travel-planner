@@ -1,6 +1,9 @@
 package tatew.ryoko.model.db;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +26,7 @@ public class Activity
     @Id
     private long id;
 
-    @NotNull
+    @NotNull(message = "Name is required")
     private String name;
 
     @Column("is_outdoor")
@@ -39,15 +42,20 @@ public class Activity
     private String mapLink;
 
     @Column("map_provider")
+    @Size(max = 10, message = "Map provider must be 10 characters or less")
     private String mapProvider;
 
     @Column("website_link")
     private String websiteLink;
 
     @Column("cost_bucket")
+    @Max(value = 5, message = "Cost bucket must be between 0 and 5")
+    @Min(value = 0, message = "Cost bucket must be between 0 and 5")
     private int costBucket;
 
     private BigDecimal cost;
+    
+    @Size(max = 3, message = "Currency must be 3 characters or less")
     private String currency;
 
     @Column("created_at")
