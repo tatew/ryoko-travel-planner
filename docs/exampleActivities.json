@@ -1,0 +1,48 @@
+[
+    {
+        "name": "Visit Empire State Building",
+        "isOutdoor": false,
+        "durationMinutes": 60,
+        "coordinates": {
+            "x": -73.9882393,
+            "y": 40.7484405
+        },
+        "notes": "The Empire State Building is a 102-story Art Deco skyscraper in Midtown Manhattan, New York City. It was designed by Shreve, Lamb & Harmon and completed in 1931. The building has a total height of 1,454 feet (443.2 m) including its antenna and a roof height of 1,250 feet (381 m).",
+        "mapLink": "https://maps.app.goo.gl/f933yapJFdAhMJTW9",
+        "mapProvider": "google",
+        "websiteLink": "https://www.esbnyc.com/",
+        "costBucket": 3,
+        "cost": 150,
+        "currency": "USD",
+        "address": {
+            "addressLine1": "20 W 34th St.",
+            "addressCity": "New York City",
+            "addressState": "NY",
+            "addressCountry": "USA",
+            "addressPostcode": "10001"
+        }
+    },
+    {
+        "name": "Visit Statue of Liberty",
+        "isOutdoor": true,
+        "durationMinutes": 30,
+        "coordinates": {
+            "x": -74.016716,
+            "y": 40.703318
+        },
+        "notes": "View Statue of Liberty from the south tip of Manhattan. No parking, take Subway to South Ferry Station.",
+        "mapLink": "https://maps.app.goo.gl/MK4JbdqpT1SHWenw9",
+        "mapProvider": "google",
+        "websiteLink": "https://www.nps.gov/stli/index.htm",
+        "costBucket": 0,
+        "cost": 0,
+        "currency": "USD",
+        "address": {
+            "addressLine1": "Battery Park Underpass",
+            "addressCity": "New York City",
+            "addressState": "NY",
+            "addressCountry": "USA",
+            "addressPostcode": "10004"
+        }
+    }
+]
