@@ -81,7 +81,7 @@ public class ActivityController
     {
         Activity createdActivity = activityRepository.save(activity);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .header("Location", "/activities/" + createdActivity.id())
+                .header("Location", "/activities/" + createdActivity.getId())
                 .build();
     }
 }
