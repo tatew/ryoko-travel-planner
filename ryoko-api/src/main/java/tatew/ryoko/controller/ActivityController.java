@@ -17,13 +17,11 @@ import tatew.ryoko.repository.ActivityRepository;
 
 @Slf4j
 @RestController
-@RequestMapping("/activities")
 public class ActivityController
 {
     @Autowired
     private ActivityRepository activityRepository;
 
-    @ResponseBody
     @Operation(
             operationId = "getAllActivities",
             summary = "Gets all activities",
@@ -35,14 +33,13 @@ public class ActivityController
                     @ApiResponse(responseCode = "500", description = "Internal Server Error")
             }
     )
-    @GetMapping(value = "", produces = {"application/json"})
-    public ResponseEntity<Iterable<Activity>> getActivities()
+    @GetMapping(value = "/activities", produces = {"application/json"})
+    public @ResponseBody ResponseEntity<Iterable<Activity>> getActivities()
     {
         var activities = activityRepository.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(activities);
     }
 
-    @ResponseBody
     @Operation(
             operationId = "getActivityById",
             summary = "Gets an activity by ID",
@@ -55,8 +52,8 @@ public class ActivityController
                     @ApiResponse(responseCode = "500", description = "Internal Server Error")
             }
     )
-    @GetMapping(value = "/{activityId}", produces = {"application/json"})
-    public ResponseEntity<Activity> getActivityById(
+    @GetMapping(value = "/activities/{activityId}", produces = {"application/json"})
+    public @ResponseBody ResponseEntity<Activity> getActivityById(
             @Parameter(description = "The id of the activity to return", required = true)
             @PathVariable(value = "activityId") long id)
     {
@@ -75,8 +72,8 @@ public class ActivityController
                     @ApiResponse(responseCode = "500", description = "Internal Server Error")
             }
     )
-    @PostMapping(value = "", consumes = {"application/json"})
-    public ResponseEntity<Void> addActivity(
+    @PostMapping(value = "/activities", consumes = {"application/json"})
+    public @ResponseBody ResponseEntity<Void> addActivity(
             @Parameter(description = "Create a new activity", required = true)
             @Valid
             @RequestBody
