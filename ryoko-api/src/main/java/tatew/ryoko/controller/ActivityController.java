@@ -39,7 +39,7 @@ public class ActivityController
                     @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorDto.class),
-                                    examples = @ExampleObject(value = "{\"message\":\"An unexpected server error occurred\",\"status\":\"INTERNAL_SERVER_ERROR\"}"))
+                                    examples = @ExampleObject(value = "{\"messages\":[\"An unexpected server error occurred\"],\"status\":\"INTERNAL_SERVER_ERROR\"}"))
                     })
             }
     )
@@ -61,12 +61,12 @@ public class ActivityController
                     @ApiResponse(responseCode = "404", description = "Not Found", content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorDto.class),
-                                    examples = @ExampleObject(value = "{\"message\":\"Activity with id 1 not found\",\"status\":\"NOT_FOUND\"}"))
+                                    examples = @ExampleObject(value = "{\"messages\":[\"Activity with id 1 not found\"],\"status\":\"NOT_FOUND\"}"))
                     }),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorDto.class),
-                                    examples = @ExampleObject(value = "{\"message\":\"An unexpected server error occurred\",\"status\":\"INTERNAL_SERVER_ERROR\"}"))
+                                    examples = @ExampleObject(value = "{\"messages\":[\"An unexpected server error occurred\"],\"status\":\"INTERNAL_SERVER_ERROR\"}"))
                     })
             }
     )
@@ -88,12 +88,12 @@ public class ActivityController
                     @ApiResponse(responseCode = "400", description = "BadRequest", content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorDto.class),
-                                    examples = @ExampleObject(value = "{\"message\":\"An unexpected server error occurred\",\"status\":\"INTERNAL_SERVER_ERROR\"}"))
+                                    examples = @ExampleObject(value = "{\"messages\":[\"Map provider must be 10 characters or less\"],\"status\":\"BAD_REQUEST\"}"))
                     }),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorDto.class),
-                                    examples = @ExampleObject(value = "{\"message\":\"An unexpected server error occurred\",\"status\":\"INTERNAL_SERVER_ERROR\"}"))
+                                    examples = @ExampleObject(value = "{\"messages\":[\"An unexpected server error occurred\"],\"status\":\"INTERNAL_SERVER_ERROR\"}"))
                     })
             }
     )
