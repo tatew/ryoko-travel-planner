@@ -1,0 +1,19 @@
+meta {
+  name: CreateRegion
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{URL}}/regions
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "New York City",
+    "mapLink": "https://maps.app.goo.gl/PrGUc1wJV42wkRbR6",
+    "mapProvider": "google"
+  }
+}

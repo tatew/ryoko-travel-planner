@@ -1,0 +1,15 @@
+meta {
+  name: GetRegions
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{URL}}/regions?includeArchived=true
+  body: none
+  auth: none
+}
+
+params:query {
+  includeArchived: true
+}

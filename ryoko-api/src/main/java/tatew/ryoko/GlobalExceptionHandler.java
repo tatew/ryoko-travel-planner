@@ -6,6 +6,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,5 +44,13 @@ public class GlobalExceptionHandler
         log.error("Request body validation failed: ", e);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorDto(errors, HttpStatus.BAD_REQUEST));
+    }
+
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorDto> handleHttpMessageNotReadableException(HttpMessageNotReadableException e)
+    {
+        log.error("Request body could not be read: ", e);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorDto(List.of(e.getMessage()), HttpStatus.BAD_REQUEST));
     }
 }

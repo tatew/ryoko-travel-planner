@@ -2,9 +2,9 @@ package tatew.ryoko.exception;
 
 import lombok.Getter;
 
+@Getter
 public class GetActivityException extends Exception
 {
-    @Getter
     private long activityId;
 
     public GetActivityException(String message)
