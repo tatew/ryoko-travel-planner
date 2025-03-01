@@ -1,0 +1,19 @@
+meta {
+  name: GetActivitiesForRegion
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{URL}}/regions/:regionId/activities?archived=false
+  body: none
+  auth: none
+}
+
+params:query {
+  archived: false
+}
+
+params:path {
+  regionId: 3
+}

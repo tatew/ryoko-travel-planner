@@ -29,6 +29,9 @@ public class Activity
     @NotNull(message = "Name is required")
     private String name;
 
+    @Column("region_id")
+    private long regionId;
+
     @Column("is_outdoor")
     private boolean isOutdoor;
 
@@ -54,7 +57,7 @@ public class Activity
     private int costBucket;
 
     private BigDecimal cost;
-    
+
     @Size(max = 3, message = "Currency must be 3 characters or less")
     private String currency;
 
@@ -68,3 +71,4 @@ public class Activity
     @Embedded.Empty
     private Address address;
 }
+

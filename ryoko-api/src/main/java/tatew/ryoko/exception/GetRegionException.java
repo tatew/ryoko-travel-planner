@@ -3,7 +3,7 @@ package tatew.ryoko.exception;
 import lombok.Getter;
 
 @Getter
-public class GetRegionException extends RuntimeException
+public class GetRegionException extends Exception
 {
     private long regionId;
 

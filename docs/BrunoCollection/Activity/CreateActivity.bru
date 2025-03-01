@@ -12,13 +12,16 @@ post {
 
 body:json {
   {
-    "id": 1,
-    "name": "Statue of Liberty",
-    "isOutdoor": true,
+    "name": "Another Visit Statue of Liberty",
+    "regionId": 3,
     "durationMinutes": 30,
     "coordinates": {
+      "type": "point",
+      "value": "(-74.016716,40.703318)",
       "x": -74.016716,
-      "y": 40.703318
+      "y": 40.703318,
+      "isNull": false,
+      "null": false
     },
     "notes": "View Statue of Liberty from the south tip of Manhattan. No parking, take Subway to South Ferry Station.",
     "mapLink": "https://maps.app.goo.gl/MK4JbdqpT1SHWenw9",
@@ -29,10 +32,12 @@ body:json {
     "currency": "USD",
     "address": {
       "addressLine1": "Battery Park Underpass",
+      "addressLine2": null,
       "addressCity": "New York City",
       "addressState": "NY",
       "addressCountry": "USA",
       "addressPostcode": "10004"
-    }
+    },
+    "outdoor": true
   }
 }
