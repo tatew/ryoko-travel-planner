@@ -110,15 +110,41 @@ public class ActivityController
                 .build();
     }
 
+    @Operation(
+            operationId = "archiveActivity",
+            summary = "Archives an activity",
+            tags = "activities-controller",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Activity Archived"),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorDto.class),
+                                    examples = @ExampleObject(value = "{\"messages\":[\"Activity with id 1 not found\"],\"status\":\"NOT_FOUND\"}"))
+                    }),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorDto.class),
+                                    examples = @ExampleObject(value = "{\"messages\":[\"An unexpected server error occurred\"],\"status\":\"INTERNAL_SERVER_ERROR\"}"))
+                    })
+            }
+    )
+    @PostMapping(value = "/activities/{activityId}/archive")
+    public @ResponseBody ResponseEntity<Void> archiveActivity(
+            @Parameter(description = "The id of the activity to archive", required = true)
+            @PathVariable(value = "activityId") long id) throws GetActivityException
+    {
+        activityService.archiveActivity(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 
     @ExceptionHandler(GetActivityException.class)
     public ResponseEntity<ErrorDto> handleGetActivityException(GetActivityException e)
     {
-        String message = "Activity with id " + e.getActivityId() + " not found";
         MDC.put("activityId", String.valueOf(e.getActivityId()));
         log.error(e.getMessage(), e);
         MDC.remove("activityId");
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorDto(List.of(message), HttpStatus.NOT_FOUND));
+                .body(new ErrorDto(List.of(e.getMessage()), HttpStatus.NOT_FOUND));
     }
 }

@@ -6,6 +6,8 @@ import tatew.ryoko.exception.GetActivityException;
 import tatew.ryoko.model.db.Activity;
 import tatew.ryoko.repository.ActivityRepository;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.NoSuchElementException;
 
 @Configuration
@@ -52,5 +54,16 @@ public class ActivityService
     public Activity createActivity(Activity activity)
     {
         return activityRepository.save(activity);
+    }
+
+    public void archiveActivity(long id) throws GetActivityException
+    {
+        Activity activityToUpdate = activityRepository.findById(id).orElseThrow(() -> new GetActivityException("Activity not found", id));
+        if (activityToUpdate.getArchivedAt() != null)
+        {
+            throw new GetActivityException("Activity already archived", id);
+        }
+        activityToUpdate.setArchivedAt(Timestamp.from(Instant.now()));
+        activityRepository.save(activityToUpdate);
     }
 }
