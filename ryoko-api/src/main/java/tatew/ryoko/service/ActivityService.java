@@ -3,8 +3,10 @@ package tatew.ryoko.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import tatew.ryoko.exception.GetActivityException;
+import tatew.ryoko.exception.GetRegionException;
 import tatew.ryoko.model.db.Activity;
 import tatew.ryoko.repository.ActivityRepository;
+import tatew.ryoko.repository.RegionRepository;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -15,6 +17,9 @@ public class ActivityService
 {
     @Autowired
     private ActivityRepository activityRepository;
+
+    @Autowired
+    private RegionRepository regionRepository;
 
     /**
      * Gets all activities
@@ -44,6 +49,23 @@ public class ActivityService
         {
             throw new GetActivityException("Activity not found", id);
         }
+    }
+
+    /**
+     * Gets all activities for a region
+     *
+     * @param regionId The ID of the region to get activities for
+     * @param archived Whether to include archived activities
+     * @return All activities for the region with the given ID
+     * @throws GetRegionException If the region with the given ID does not exist
+     */
+    public Iterable<Activity> getActivitiesByRegionId(long regionId, boolean archived) throws GetRegionException
+    {
+        if (!regionRepository.existsById(regionId))
+        {
+            throw new GetRegionException("Region not found", regionId);
+        }
+        return archived ? activityRepository.findAllByRegionIdArchived(regionId) : activityRepository.findAllByRegionIdNotArchived(regionId);
     }
 
     /**

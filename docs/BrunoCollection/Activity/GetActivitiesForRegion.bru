@@ -1,19 +1,16 @@
 meta {
   name: GetActivitiesForRegion
   type: http
-  seq: 6
+  seq: 3
 }
 
 get {
-  url: {{URL}}/regions/:regionId/activities?archived=false
+  url: {{URL}}/activities?archived=true&regionId=3
   body: none
   auth: none
 }
 
 params:query {
-  archived: false
-}
-
-params:path {
+  archived: true
   regionId: 3
 }

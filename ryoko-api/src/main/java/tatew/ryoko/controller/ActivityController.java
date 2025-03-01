@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tatew.ryoko.exception.GetActivityException;
+import tatew.ryoko.exception.GetRegionException;
 import tatew.ryoko.model.db.Activity;
 import tatew.ryoko.model.dto.ErrorDto;
 import tatew.ryoko.service.ActivityService;
@@ -36,6 +37,11 @@ public class ActivityController
                     @ApiResponse(responseCode = "200", description = "OK", content = {
                             @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Activity.class)))
                     }),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorDto.class),
+                                    examples = @ExampleObject(value = "{\"messages\":[\"Region with id 1 not found\"],\"status\":\"NOT_FOUND\"}"))
+                    }),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
                             @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorDto.class),
@@ -45,9 +51,21 @@ public class ActivityController
     )
     @GetMapping(value = "/activities", produces = {"application/json"})
     public @ResponseBody ResponseEntity<Iterable<Activity>> getActivities(
-            @RequestParam(name = "archived", required = false) boolean archived)
+            @Parameter(description = "The id of the region to return activities for", required = false)
+            @RequestParam(value = "regionId", required = false) Long regionId,
+            @Parameter(description = "Whether to include archived activities", required = false)
+            @RequestParam(name = "archived", required = false) boolean archived) throws GetRegionException
     {
-        var activities = activityService.getAllActivities(archived);
+        Iterable<Activity> activities = null;
+        if (regionId != null)
+        {
+            activities = activityService.getActivitiesByRegionId(regionId, archived);
+        }
+        else
+        {
+            activities = activityService.getAllActivities(archived);
+        }
+
         return ResponseEntity.status(HttpStatus.OK).body(activities);
     }
 
@@ -163,6 +181,16 @@ public class ActivityController
     {
         activityService.deleteActivity(id);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @ExceptionHandler(GetRegionException.class)
+    public ResponseEntity<ErrorDto> handleGetRegionException(GetRegionException e)
+    {
+        MDC.put("regionId", String.valueOf(e.getRegionId()));
+        log.error(e.getMessage(), e);
+        MDC.remove("regionId");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorDto(List.of(e.getMessage()), HttpStatus.NOT_FOUND));
     }
 
     @ExceptionHandler(GetActivityException.class)

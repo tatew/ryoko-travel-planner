@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tatew.ryoko.exception.GetRegionException;
-import tatew.ryoko.model.db.Activity;
 import tatew.ryoko.model.db.Region;
 import tatew.ryoko.model.dto.ErrorDto;
 import tatew.ryoko.service.RegionService;
@@ -80,37 +79,6 @@ public class RegionController
     {
         Region region = regionService.getRegionById(id);
         return ResponseEntity.status(HttpStatus.OK).body(region);
-    }
-
-    @Operation(
-            operationId = "getActivitiesByRegionId",
-            summary = "Gets all activities for a region",
-            tags = {"regions-controller"},
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK", content = {
-                            @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Activity.class)))
-                    }),
-                    @ApiResponse(responseCode = "404", description = "Not Found", content = {
-                            @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorDto.class),
-                                    examples = @ExampleObject(value = "{\"messages\":[\"Region with id 1 not found\"],\"status\":\"NOT_FOUND\"}"))
-                    }),
-                    @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
-                            @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorDto.class),
-                                    examples = @ExampleObject(value = "{\"messages\":[\"An unexpected server error occurred\"],\"status\":\"INTERNAL_SERVER_ERROR\"}"))
-                    })
-            }
-    )
-    @GetMapping(value = "/regions/{regionId}/activities", produces = {"application/json"})
-    public @ResponseBody ResponseEntity<Iterable<Activity>> getActivitiesByRegionId(
-            @Parameter(description = "The id of the region to return activities for", required = true)
-            @PathVariable(value = "regionId") long id,
-            @Parameter(description = "Whether to include archived activities", required = false)
-            @RequestParam(name = "archived", required = false) boolean archived) throws GetRegionException
-    {
-        Iterable<Activity> activities = regionService.getActivitiesByRegionId(id, archived);
-        return ResponseEntity.status(HttpStatus.OK).body(activities);
     }
 
     @Operation(
