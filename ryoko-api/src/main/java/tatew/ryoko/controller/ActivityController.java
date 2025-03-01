@@ -44,9 +44,10 @@ public class ActivityController
             }
     )
     @GetMapping(value = "/activities", produces = {"application/json"})
-    public @ResponseBody ResponseEntity<Iterable<Activity>> getActivities()
+    public @ResponseBody ResponseEntity<Iterable<Activity>> getActivities(
+            @RequestParam(name = "includeArchived", required = false) boolean includeArchived)
     {
-        var activities = activityService.getAllActivities();
+        var activities = activityService.getAllActivities(includeArchived);
         return ResponseEntity.status(HttpStatus.OK).body(activities);
     }
 
@@ -81,7 +82,7 @@ public class ActivityController
 
     @Operation(
             operationId = "postActivity",
-            summary = "Creates a new Activity",
+            summary = "Creates a new Activity, or updates an existing activity",
             tags = "activities-controller",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Activity Created"),
@@ -137,6 +138,32 @@ public class ActivityController
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @Operation(
+            operationId = "deleteActivity",
+            summary = "Deletes an activity",
+            tags = "activities-controller",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Activity Deleted"),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorDto.class),
+                                    examples = @ExampleObject(value = "{\"messages\":[\"Activity with id 1 not found\"],\"status\":\"NOT_FOUND\"}"))
+                    }),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorDto.class),
+                                    examples = @ExampleObject(value = "{\"messages\":[\"An unexpected server error occurred\"],\"status\":\"INTERNAL_SERVER_ERROR\"}"))
+                    })
+            }
+    )
+    @DeleteMapping(value = "/activities/{activityId}")
+    public @ResponseBody ResponseEntity<Void> deleteActivity(
+            @Parameter(description = "The id of the activity to delete", required = true)
+            @PathVariable(value = "activityId") long id) throws GetActivityException
+    {
+        activityService.deleteActivity(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
     @ExceptionHandler(GetActivityException.class)
     public ResponseEntity<ErrorDto> handleGetActivityException(GetActivityException e)

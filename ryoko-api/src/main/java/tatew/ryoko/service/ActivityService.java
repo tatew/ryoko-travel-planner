@@ -19,11 +19,19 @@ public class ActivityService
     /**
      * Gets all activities
      *
+     * @param includeArchived Whether to include archived activities
      * @return All activities
      */
-    public Iterable<Activity> getAllActivities()
+    public Iterable<Activity> getAllActivities(boolean includeArchived)
     {
-        return activityRepository.findAll();
+        if (includeArchived)
+        {
+            return activityRepository.findAll();
+        }
+        else
+        {
+            return activityRepository.findAllNotArchived();
+        }
     }
 
     /**
@@ -56,6 +64,12 @@ public class ActivityService
         return activityRepository.save(activity);
     }
 
+    /**
+     * Archives an activity
+     *
+     * @param id The ID of the activity to archive
+     * @throws GetActivityException If the activity with the given ID does not exist or is already archived
+     */
     public void archiveActivity(long id) throws GetActivityException
     {
         Activity activityToUpdate = activityRepository.findById(id).orElseThrow(() -> new GetActivityException("Activity not found", id));
@@ -65,5 +79,17 @@ public class ActivityService
         }
         activityToUpdate.setArchivedAt(Timestamp.from(Instant.now()));
         activityRepository.save(activityToUpdate);
+    }
+
+    /**
+     * Deletes an activity
+     *
+     * @param id The ID of the activity to delete
+     * @throws GetActivityException If the activity with the given ID does not exist
+     */
+    public void deleteActivity(long id) throws GetActivityException
+    {
+        Activity activityToDelete = activityRepository.findById(id).orElseThrow(() -> new GetActivityException("Activity not found", id));
+        activityRepository.delete(activityToDelete);
     }
 }

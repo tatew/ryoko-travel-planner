@@ -5,7 +5,11 @@ meta {
 }
 
 get {
-  url: {{URL}}/activities
+  url: {{URL}}/activities?includeArchived=false
   body: none
   auth: none
+}
+
+params:query {
+  includeArchived: false
 }
