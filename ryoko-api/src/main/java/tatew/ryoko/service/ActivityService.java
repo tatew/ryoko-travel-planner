@@ -19,19 +19,12 @@ public class ActivityService
     /**
      * Gets all activities
      *
-     * @param includeArchived Whether to include archived activities
+     * @param archived Whether to include archived activities
      * @return All activities
      */
-    public Iterable<Activity> getAllActivities(boolean includeArchived)
+    public Iterable<Activity> getAllActivities(boolean archived)
     {
-        if (includeArchived)
-        {
-            return activityRepository.findAll();
-        }
-        else
-        {
-            return activityRepository.findAllNotArchived();
-        }
+        return archived ? activityRepository.findAllArchived() : activityRepository.findAllNotArchived();
     }
 
     /**

@@ -45,9 +45,9 @@ public class ActivityController
     )
     @GetMapping(value = "/activities", produces = {"application/json"})
     public @ResponseBody ResponseEntity<Iterable<Activity>> getActivities(
-            @RequestParam(name = "includeArchived", required = false) boolean includeArchived)
+            @RequestParam(name = "archived", required = false) boolean archived)
     {
-        var activities = activityService.getAllActivities(includeArchived);
+        var activities = activityService.getAllActivities(archived);
         return ResponseEntity.status(HttpStatus.OK).body(activities);
     }
 

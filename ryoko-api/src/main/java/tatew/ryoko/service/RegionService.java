@@ -19,19 +19,12 @@ public class RegionService
     /**
      * Gets all regions
      *
-     * @param includeArchived Whether to include archived regions
+     * @param archived Whether to get archived regions
      * @return All regions
      */
-    public Iterable<Region> getAllRegions(boolean includeArchived)
+    public Iterable<Region> getAllRegions(boolean archived)
     {
-        if (includeArchived)
-        {
-            return regionRepository.findAll();
-        }
-        else
-        {
-            return regionRepository.findAllNotArchived();
-        }
+        return archived ? regionRepository.findAllArchived() : regionRepository.findAllNotArchived();
     }
 
     /**

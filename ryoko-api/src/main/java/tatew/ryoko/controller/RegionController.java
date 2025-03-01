@@ -45,9 +45,9 @@ public class RegionController
     )
     @GetMapping(value = "/regions", produces = {"application/json"})
     public @ResponseBody ResponseEntity<Iterable<Region>> getRegions(
-            @RequestParam(name = "includeArchived", required = false) boolean includeArchived)
+            @RequestParam(name = "archived", required = false) boolean archived)
     {
-        var regions = regionService.getAllRegions(includeArchived);
+        var regions = regionService.getAllRegions(archived);
         return ResponseEntity.status(HttpStatus.OK).body(regions);
     }
 
