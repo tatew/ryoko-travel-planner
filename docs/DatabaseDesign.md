@@ -56,3 +56,5 @@ erDiagram
 Resource about "tagging" database schemas: [link](http://howto.philippkeller.com/2005/04/24/Tags-Database-schemas/)
 
 SO about options for enums in a db: [link](https://stackoverflow.com/questions/10923213/postgres-enum-data-type-or-check-constraint)
+
+List of Java Type mappings to Postgres: [link](https://www.postgresql.org/message-id/AANLkTikkkxN+-UUiGVTzj8jdfS4PdpB8_tDONMFHNqHk@mail.gmail.com)
