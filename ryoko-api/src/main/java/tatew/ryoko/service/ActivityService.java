@@ -2,6 +2,8 @@ package tatew.ryoko.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.relational.core.conversion.DbActionExecutionException;
+import tatew.ryoko.exception.CreateActivityException;
 import tatew.ryoko.exception.GetActivityException;
 import tatew.ryoko.exception.GetRegionException;
 import tatew.ryoko.model.db.Activity;
@@ -74,9 +76,16 @@ public class ActivityService
      * @param activity The activity to create
      * @return The created activity
      */
-    public Activity createActivity(Activity activity)
+    public Activity createActivity(Activity activity) throws CreateActivityException
     {
-        return activityRepository.save(activity);
+        try
+        {
+            return activityRepository.save(activity);
+        }
+        catch (DbActionExecutionException e)
+        {
+            throw new CreateActivityException("Error saving activity to the database", e);
+        }
     }
 
     /**

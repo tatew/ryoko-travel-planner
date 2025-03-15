@@ -2,6 +2,8 @@ package tatew.ryoko.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.relational.core.conversion.DbActionExecutionException;
+import tatew.ryoko.exception.CreateRegionException;
 import tatew.ryoko.exception.GetRegionException;
 import tatew.ryoko.model.db.Region;
 import tatew.ryoko.repository.ActivityRepository;
@@ -56,9 +58,16 @@ public class RegionService
      * @param region The region to create
      * @return The created region
      */
-    public Region createRegion(Region region)
+    public Region createRegion(Region region) throws CreateRegionException
     {
-        return regionRepository.save(region);
+        try
+        {
+            return regionRepository.save(region);
+        }
+        catch (DbActionExecutionException e)
+        {
+            throw new CreateRegionException("Failed to create region", e);
+        }
     }
 
     /**

@@ -9,6 +9,8 @@ erDiagram
         int id PK
         int region_id FK
         text name
+        text phone_number
+        text email_address
         bool is_outdoor
         int duration_minutes
         point coordinates
@@ -31,14 +33,14 @@ erDiagram
     REGION {
         int id PK
         text name
-        text map_link 
+        text map_link
         varchar(10) map_provider
         timestamptz created_at
         timestamptz archived_at
     }
     TAG {
         int id PK
-        text name 
+        text name
     }
     ACTIVITY_TAG {
         int id PK
@@ -48,10 +50,10 @@ erDiagram
     ACTIVITY zero or more to one or zero REGION : located_in
     ACTIVITY one to zero or more ACTIVITY_TAG : "tagged with"
     TAG one to zero or more ACTIVITY_TAG: "applies to"
-    
+
 ```
 
-### Referneces 
+### Referneces
 
 Resource about "tagging" database schemas: [link](http://howto.philippkeller.com/2005/04/24/Tags-Database-schemas/)
 

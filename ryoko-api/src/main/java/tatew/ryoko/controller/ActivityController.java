@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tatew.ryoko.exception.CreateActivityException;
 import tatew.ryoko.exception.GetActivityException;
 import tatew.ryoko.exception.GetRegionException;
 import tatew.ryoko.model.db.Activity;
@@ -121,7 +122,7 @@ public class ActivityController
             @Parameter(description = "Create a new activity or update an existing activity", required = true)
             @Valid
             @RequestBody
-            Activity activity)
+            Activity activity) throws CreateActivityException
     {
         Activity createdActivity = activityService.createActivity(activity);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -201,5 +202,13 @@ public class ActivityController
         MDC.remove("activityId");
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorDto(List.of(e.getMessage()), HttpStatus.NOT_FOUND));
+    }
+
+    @ExceptionHandler(CreateActivityException.class)
+    public ResponseEntity<ErrorDto> handleCreateActivityException(CreateActivityException e)
+    {
+        log.error(e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorDto(List.of(e.getMessage()), HttpStatus.BAD_REQUEST));
     }
 }

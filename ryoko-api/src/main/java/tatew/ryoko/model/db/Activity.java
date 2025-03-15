@@ -41,6 +41,12 @@ public class Activity
     private PGpoint coordinates;
     private String notes;
 
+    @Column("phone_number")
+    private String phoneNumber;
+
+    @Column("email_address")
+    private String emailAddress;
+
     @Column("map_link")
     private String mapLink;
 

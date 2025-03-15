@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tatew.ryoko.exception.CreateRegionException;
 import tatew.ryoko.exception.GetRegionException;
 import tatew.ryoko.model.db.Region;
 import tatew.ryoko.model.dto.ErrorDto;
@@ -104,7 +105,7 @@ public class RegionController
             @Parameter(description = "Create a new region or update an existing region", required = true)
             @Valid
             @RequestBody
-            Region region)
+            Region region) throws CreateRegionException
     {
         Region createdRegion = regionService.createRegion(region);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -174,5 +175,13 @@ public class RegionController
         MDC.remove("regionId");
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorDto(List.of(e.getMessage()), HttpStatus.NOT_FOUND));
+    }
+
+    @ExceptionHandler(CreateRegionException.class)
+    public ResponseEntity<ErrorDto> handleCreateRegionException(CreateRegionException e)
+    {
+        log.error(e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorDto(List.of(e.getMessage()), HttpStatus.BAD_REQUEST));
     }
 }

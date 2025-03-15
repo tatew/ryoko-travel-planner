@@ -13,6 +13,8 @@ CREATE
         id SERIAL PRIMARY KEY,
         region_id INTEGER REFERENCES region,
         name TEXT NOT NULL,
+        email_address TEXT,
+        phone_number TEXT,
         is_outdoor BOOLEAN,
         duration_minutes INTEGER,
         coordinates POINT,
