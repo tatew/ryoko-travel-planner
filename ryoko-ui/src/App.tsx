@@ -1,8 +1,8 @@
 import "@radix-ui/themes/styles.css";
 import { Flex, Text, Button } from "@radix-ui/themes";
-import DarkModeToggle from "./components/darkModeToggle";
+import { DarkModeToggle } from "./components/darkModeToggle";
 
-function App() {
+export const App: React.FC = () => {
     return (
         <Flex direction="column" gap="2">
             <Text>Hello from Radix Themes :)</Text>
@@ -10,6 +10,4 @@ function App() {
             <DarkModeToggle />
         </Flex>
     );
-}
-
-export default App;
+};
