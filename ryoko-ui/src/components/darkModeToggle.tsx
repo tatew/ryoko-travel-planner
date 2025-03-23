@@ -1,7 +1,6 @@
 import { useTheme } from "next-themes";
 import { Switch, Flex } from "@radix-ui/themes";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSun, faMoon } from "@fortawesome/free-regular-svg-icons";
+import { IconSun, IconMoonStars } from "@tabler/icons-react";
 
 export const DarkModeToggle: React.FC = () => {
     const { theme, setTheme } = useTheme();
@@ -9,12 +8,13 @@ export const DarkModeToggle: React.FC = () => {
     return (
         <Flex align="center" gap="2">
             <Switch
+                size={"3"}
                 defaultChecked={theme === "light"}
                 onCheckedChange={(checked) => {
                     setTheme(checked ? "light" : "dark");
                 }}
             />
-            {theme === "light" ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faMoon} />}
+            {theme === "light" ? <IconSun /> : <IconMoonStars />}
         </Flex>
     );
 };
