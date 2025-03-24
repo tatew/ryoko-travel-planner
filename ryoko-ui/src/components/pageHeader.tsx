@@ -1,5 +1,5 @@
 import { Box, Flex, Heading, IconButton, TabNav } from "@radix-ui/themes";
-import { IconPlaneDeparture, IconUser, IconUserCircle, IconUserSquare } from "@tabler/icons-react";
+import { IconPlaneDeparture, IconUserCircle } from "@tabler/icons-react";
 import { DarkModeToggle } from "./darkModeToggle";
 import { Link, useLocation, useNavigate } from "react-router";
 
