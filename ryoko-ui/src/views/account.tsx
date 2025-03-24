@@ -1,10 +1,10 @@
 import { Heading } from "@radix-ui/themes";
 import React from "react";
 
-export const Activities: React.FC = () => {
+export const Account: React.FC = () => {
     return (
         <React.Fragment>
-            <Heading size={"6"}>Activities</Heading>
+            <Heading size="6">Account</Heading>
         </React.Fragment>
     );
 };

@@ -1,14 +1,14 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { Route, Routes } from "react-router";
 import { Home } from "./views/home";
 import { Activities } from "./views/activities";
+import { Account } from "./views/account";
 
 export const AppRoutes = () => {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/activities" element={<Activities />} />
-            </Routes>
-        </BrowserRouter>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/activities" element={<Activities />} />
+            <Route path="/account" element={<Account />} />
+        </Routes>
     );
 };
