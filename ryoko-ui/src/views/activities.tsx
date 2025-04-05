@@ -1,8 +1,10 @@
-import { Heading, Section, Table, Text } from "@radix-ui/themes";
+import { Button, Flex, Heading, IconButton, Section, Table, Text, TextField } from "@radix-ui/themes";
 import React, { useEffect } from "react";
 import { RYOKO_API_SERVICE } from "../services/ryokoApiService";
 import { Activity } from "../interfaces/activity";
 import getSymbolFromCurrency from "currency-symbol-map";
+import { IconPlus, IconSearch, IconSortAscendingLetters } from "@tabler/icons-react";
+import { SortableTableHeader } from "../components/sortableTableHeader";
 
 export const Activities: React.FC = () => {
     const [activities, setActivities] = React.useState<Activity[]>([]);
@@ -20,15 +22,24 @@ export const Activities: React.FC = () => {
     return (
         <React.Fragment>
             <Section>
-                <Heading size={"6"}>Activities</Heading>
+                <Flex justify="between" align="center">
+                    <Button size="3">
+                        <IconPlus /> New Activity
+                    </Button>
+                    <TextField.Root placeholder="Search activities..." size={"3"}>
+                        <TextField.Slot>
+                            <IconSearch size={16} />
+                        </TextField.Slot>
+                    </TextField.Root>
+                </Flex>
             </Section>
 
             <Table.Root variant="surface">
                 <Table.Header>
                     <Table.Row>
-                        <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
-                        <Table.ColumnHeaderCell>Cost</Table.ColumnHeaderCell>
-                        <Table.ColumnHeaderCell>Notes</Table.ColumnHeaderCell>
+                        <SortableTableHeader text="Name" sortType="alphabetic" isActive />
+                        <SortableTableHeader text="Cost" sortType="numeric" />
+                        <SortableTableHeader text="Notes" />
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
